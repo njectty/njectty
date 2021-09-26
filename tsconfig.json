@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outDir": "package/types",
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "sourceMap": true,
+        "declaration": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "node",
+        "target": "ES2018",
+        "module": "ES2020",
+        "lib": ["ES2021"]
+    },
+    "exclude": ["package"]
+}
