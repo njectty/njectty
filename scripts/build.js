@@ -1,6 +1,6 @@
 const { writeFileSync: writeFile } = require("fs");
 const { join, resolve } = require("path");
-const { cp, exec, exit, rm } = require("shelljs");
+const { cp, exec, exit, rm, test } = require("shelljs");
 
 if (process.cwd() !== join(__dirname, "..")) exit(1);
 
