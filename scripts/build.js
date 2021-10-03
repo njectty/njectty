@@ -4,11 +4,11 @@ const { cp, exec, exit, rm } = require("shelljs");
 
 if (process.cwd() !== join(__dirname, "..")) exit(1);
 
-rm("-rf", "package");
+if (test("-d", "package")) rm("-rf", "package");
 
 exec("npx webpack");
 
-cp("LICENSE", "package.json", "README.md", "package");
+cp("LICENSE", "README.md", "package");
 
 createPackageJSON: {
     const source = require("../package.json");

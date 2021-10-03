@@ -34,9 +34,16 @@ export class Module implements InjectableFactory {
             injects: externals,
         } = params;
 
-        const module = new Module(context, globalInjector);
+        const module = new Module(context, parentModule, globalInjector);
 
-        if (parentModule) module.imports.push(parentModule.exports);
+        (module as any).name = SourceClass.name;
+
+        if (parentModule) {
+            let parentModule = module.parentModule;
+
+            do module.imports.push(parentModule!.exports);
+            while ((parentModule = parentModule!.parentModule));
+        }
 
         const { imports, exports, injects } = SourceClass[
             moduleConfigKey
@@ -76,12 +83,13 @@ export class Module implements InjectableFactory {
                             context,
                             globalInjector,
                             injects: [],
+                            parentModule: module,
                         })
                     );
 
                 const dependency = context.modules.get(item);
 
-                module.imports.push(dependency.exports);
+                module.imports.push(dependency.exports, ...dependency.imports);
             }
         });
 
@@ -110,6 +118,7 @@ export class Module implements InjectableFactory {
 
     private constructor(
         public context: Context,
+        public parentModule: Module | undefined,
         public globalInjector: GlobalInjector
     ) {}
 
