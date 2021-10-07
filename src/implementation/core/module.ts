@@ -20,32 +20,21 @@ import { InjectableFactory } from "./interfaces";
 
 export class Module implements InjectableFactory {
     static create(params: {
-        SourceClass: any;
+        ModuleClass: any;
         context: Context;
         globalInjector: GlobalInjector;
         injects: any[];
-        parentModule?: Module;
     }): Module {
         const {
-            SourceClass,
+            ModuleClass,
             context,
             globalInjector,
-            parentModule,
             injects: externals,
         } = params;
 
-        const module = new Module(context, parentModule, globalInjector);
+        const module = new Module(context, globalInjector);
 
-        (module as any).name = SourceClass.name;
-
-        if (parentModule) {
-            let parentModule = module.parentModule;
-
-            do module.imports.push(parentModule!.exports);
-            while ((parentModule = parentModule!.parentModule));
-        }
-
-        const { imports, exports, injects } = SourceClass[
+        const { imports, exports, injects } = ModuleClass[
             moduleConfigKey
         ] as ModuleConfig;
 
@@ -75,21 +64,12 @@ export class Module implements InjectableFactory {
             if (not(item)) return;
 
             if (moduleConfigKey in item) {
-                if (not(context.modules.has(item)))
-                    context.modules.set(
-                        item,
-                        Module.create({
-                            SourceClass: item,
-                            context,
-                            globalInjector,
-                            injects: [],
-                            parentModule: module,
-                        })
-                    );
-
-                const dependency = context.modules.get(item);
-
-                module.imports.push(dependency.exports, ...dependency.imports);
+                module.importModule(item);
+            } else if (moduleConfigKey in (item.module || {})) {
+                module.importModule(
+                    item.module,
+                    Array.isArray(item.injects) ? item.injects : []
+                );
             }
         });
 
@@ -102,7 +82,7 @@ export class Module implements InjectableFactory {
 
         context.factoryStack.push(module);
 
-        module.instance = new SourceClass();
+        module.instance = new ModuleClass();
         module.instance[moduleKey] = module;
 
         context.factoryStack.pop();
@@ -118,7 +98,6 @@ export class Module implements InjectableFactory {
 
     private constructor(
         public context: Context,
-        public parentModule: Module | undefined,
         public globalInjector: GlobalInjector
     ) {}
 
@@ -172,5 +151,24 @@ export class Module implements InjectableFactory {
         this.exports.tokens.add(token);
 
         if (not(this.injector.has(token))) this.injector.set(token, value);
+    }
+
+    private importModule(ModuleClass: any, injects: any[] = []): any {
+        const { context, globalInjector } = this;
+
+        if (not(context.modules.has(ModuleClass)))
+            context.modules.set(
+                ModuleClass,
+                Module.create({
+                    ModuleClass,
+                    context,
+                    globalInjector,
+                    injects,
+                })
+            );
+
+        const dependency = context.modules.get(ModuleClass);
+
+        this.imports.push(dependency.exports);
     }
 }

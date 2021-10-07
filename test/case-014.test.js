@@ -10,6 +10,13 @@ class TestComponent {}
 Injectable(TestComponent);
 
 class ChildModule {
+    static provide(injects) {
+        return {
+            module: ChildModule,
+            injects,
+        };
+    }
+
     test = Inject(TestComponent);
 
     constructor() {
@@ -19,11 +26,10 @@ class ChildModule {
 
 Module(ChildModule);
 
-class ParentModule {}
+class MainModule {}
 
-Module(ParentModule, {
-    imports: [ChildModule],
-    exports: [TestComponent],
+Module(MainModule, {
+    imports: [ChildModule.provide([TestComponent])],
 });
 
-bootstrap(ParentModule);
+bootstrap(MainModule);

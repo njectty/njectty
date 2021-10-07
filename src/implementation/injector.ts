@@ -19,15 +19,14 @@ export class Injector {
         const module = this[injectorModuleKey];
 
         if (Array.isArray(params?.injects)) {
-            class SourceClass {}
+            class ModuleClass {}
 
-            ModuleDecorator(SourceClass);
+            ModuleDecorator(ModuleClass);
 
             const tempModule = Module.create({
-                SourceClass,
+                ModuleClass,
                 context: module.context,
                 globalInjector: module.globalInjector,
-                parentModule: module,
                 injects: [injectable].concat(params!.injects),
             });
 
@@ -47,10 +46,9 @@ export class Injector {
         const parentModule = this[injectorModuleKey];
 
         return Module.create({
-            SourceClass: module,
+            ModuleClass: module,
             context: parentModule.context,
             globalInjector: parentModule.globalInjector,
-            parentModule,
             injects: params?.injects || [],
         }).instance;
     }

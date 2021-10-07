@@ -6,40 +6,30 @@ const {
     provide,
 } = require("../package/implementation");
 
-const parentToken = new InjectionToken();
-const childToken = new InjectionToken();
+const token = new InjectionToken();
+const value = {};
 
-class ChildModule {}
+class ChildModule {
+    static provide(injects) {
+        return {
+            module: ChildModule,
+            injects,
+        };
+    }
 
-Module(ChildModule, {
-    exports: [
-        provide(parentToken, "ChildModule"),
-        provide(childToken, "ChildModule"),
-    ],
-});
-
-class MainModule {
-    parentValue = Inject(parentToken);
-    childValue = Inject(childToken);
+    value = Inject(token);
 
     constructor() {
-        const ok =
-            this.parentValue === "ParentModule" &&
-            this.childValue === "ChildModule";
-
-        if (ok) success();
+        if (this.value === value) success();
     }
 }
 
+Module(ChildModule);
+
+class MainModule {}
+
 Module(MainModule, {
-    imports: [ChildModule],
+    imports: [ChildModule.provide([provide(token, value)])],
 });
 
-class ParentModule {}
-
-Module(ParentModule, {
-    imports: [MainModule],
-    exports: [provide(parentToken, "ParentModule")],
-});
-
-bootstrap(ParentModule);
+bootstrap(MainModule);

@@ -9,3 +9,8 @@ export function Module(config?: {
         noImplementationError();
     };
 }
+
+export interface StaticInjectableModule {
+    module: any;
+    injects: any[];
+}

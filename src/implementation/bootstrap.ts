@@ -9,11 +9,12 @@ export function bootstrap(module: any, params?: any): void {
     if (not(module) || not(moduleConfigKey in module)) return;
 
     const context = new Context();
+    const globalInjector = new GlobalInjector(context);
 
     Module.create({
-        SourceClass: module,
+        ModuleClass: module,
         context,
-        globalInjector: new GlobalInjector(context),
+        globalInjector,
         injects: getInjects(params),
     });
 }
