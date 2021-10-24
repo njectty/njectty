@@ -1,6 +1,6 @@
 {
     "name": "njectty",
-    "version": "0.7.5",
+    "version": "0.7.7",
     "description": "Angular like DI and modules for JS and TS",
     "main": "index.js",
     "keywords": [],
@@ -12,6 +12,7 @@
     "scripts": {
         "build": "ts-node --project scripts/tsconfig.json scripts/build.ts",
         "create-badges": "ts-node --project scripts/tsconfig.json scripts/create-badges.ts",
+        "prepublishOnly": "exit 1",
         "start": "webpack --config ./webpack.dev.config.js --watch",
         "test": "node test/engine.js"
     },
