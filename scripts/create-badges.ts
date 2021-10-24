@@ -1,8 +1,8 @@
-const { makeBadge } = require("badge-maker");
-const { writeFileSync: writeFile } = require("fs");
-const { not } = require("logical-not");
-const { join, resolve } = require("path");
-const { exit, mkdir, rm, test } = require("shelljs");
+import { makeBadge } from "badge-maker";
+import { writeFileSync as writeFile } from "fs";
+import { not } from "logical-not";
+import { join, resolve } from "path";
+import { exit, mkdir, rm, test } from "shelljs";
 
 if (process.cwd() !== join(__dirname, "..")) exit(1);
 
@@ -20,7 +20,7 @@ license: {
 
 // service
 
-function createBadge(label, message, color = "success") {
+function createBadge(label: string, message: string, color = "success"): void {
     if (not(test("-d", badgesPath))) mkdir("-p", badgesPath);
 
     const filePath = join(badgesPath, label + ".svg");
@@ -29,7 +29,7 @@ function createBadge(label, message, color = "success") {
     writeFile(filePath, svg);
 }
 
-function clean() {
+function clean(): void {
     const pattern = join(badgesPath, "*.svg");
 
     if (test("-e", pattern)) rm(pattern);

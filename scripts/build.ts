@@ -1,6 +1,6 @@
-const { writeFileSync: writeFile } = require("fs");
-const { join, resolve } = require("path");
-const { cp, exec, exit, rm, test } = require("shelljs");
+import { writeFileSync as writeFile } from "fs";
+import { join, resolve } from "path";
+import { cp, exec, exit, rm, test } from "shelljs";
 
 if (process.cwd() !== join(__dirname, "..")) exit(1);
 
@@ -22,19 +22,19 @@ createPackageJSON: {
 }
 
 createTSDeclarations: {
-    toPackage("types/index.d.ts", `export * from "./public-api";\n`);
+    toPackage("index.d.ts", `export * from "./types/public-api";\n`);
     toPackage(
-        "types/implementation.d.ts",
-        `export * from "./implementation";\n`
+        "implementation.d.ts",
+        `export * from "./types/implementation";\n`
     );
 }
 
 exec("npm run test");
-exec("node scripts/create-badges.js");
+exec("npm run create-badges");
 
 // service
 
-function toPackage(path, file) {
+function toPackage(path: string, file: string): void {
     path = resolve(`package/${path}`);
 
     writeFile(path, file);

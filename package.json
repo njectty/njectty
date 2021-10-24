@@ -1,9 +1,8 @@
 {
     "name": "njectty",
-    "version": "0.7.3",
+    "version": "0.7.5",
     "description": "Angular like DI and modules for JS and TS",
     "main": "index.js",
-    "types": "types",
     "keywords": [],
     "author": {
         "name": "Pavel Dymkov",
@@ -11,7 +10,8 @@
     },
     "license": "ISC",
     "scripts": {
-        "build": "node scripts/build.js",
+        "build": "ts-node --project scripts/tsconfig.json scripts/build.ts",
+        "create-badges": "ts-node --project scripts/tsconfig.json scripts/create-badges.ts",
         "start": "webpack --config ./webpack.dev.config.js --watch",
         "test": "node test/engine.js"
     },
@@ -19,10 +19,13 @@
         "logical-not": "^1.0.9"
     },
     "devDependencies": {
+        "@types/shelljs": "^0.8.9",
         "badge-maker": "^3.3.1",
+        "node-ts": "^5.1.2",
         "prettier": "^2.3.2",
         "shelljs": "^0.8.4",
         "ts-loader": "^9.2.5",
+        "ts-node": "^10.4.0",
         "webpack": "^5.52.0",
         "webpack-cli": "^4.8.0"
     }

@@ -1,14 +1,8 @@
-import { noImplementationError } from "./internal/no-implementation-error";
-
-export function Module(config?: {
+export declare function Module(config?: {
     imports?: any[];
     exports?: any[];
     injects?: any[];
-}): ClassDecorator {
-    return function () {
-        noImplementationError();
-    };
-}
+}): ClassDecorator;
 
 export interface StaticInjectableModule {
     module: any;

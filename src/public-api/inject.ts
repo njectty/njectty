@@ -1,7 +1,3 @@
-import { noImplementationError } from "./internal/no-implementation-error";
-
-export function Inject(token: any): PropertyDecorator | ParameterDecorator {
-    return function () {
-        noImplementationError();
-    };
-}
+export declare function Inject(token: any): PropertyDecorator;
+export declare function Inject(): PropertyDecorator;
+export declare function Inject(token: any): ParameterDecorator;

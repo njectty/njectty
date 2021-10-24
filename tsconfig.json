@@ -13,5 +13,7 @@
         "module": "ES2020",
         "lib": ["ES2021"]
     },
-    "exclude": ["package"]
+
+    "include": ["src"],
+    "exclude": ["package", "scripts"]
 }

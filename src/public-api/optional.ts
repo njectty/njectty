@@ -1,7 +1,2 @@
-import { noImplementationError } from "./internal/no-implementation-error";
-
-export function Optional(): PropertyDecorator | ParameterDecorator {
-    return function () {
-        noImplementationError();
-    };
-}
+export declare function Optional(): PropertyDecorator;
+export declare function Optional(): ParameterDecorator;
